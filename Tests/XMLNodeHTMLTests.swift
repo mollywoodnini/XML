@@ -9,7 +9,9 @@
 
 import Foundation
 import XCTest
-@testable import XMLDocument
+@testable import CLibXML2
+@testable import XML
+@testable import Data
 
 class XMLNodeHTMLTests: XCTestCase {
     var sampleHTMLDocument: XMLDocument!
@@ -17,10 +19,11 @@ class XMLNodeHTMLTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        let testBundle = NSBundle(forClass: self.dynamicType)
-        let fileURL = testBundle.URLForResource("index", withExtension: "html")!
-        let htmlData = NSData(contentsOfURL: fileURL)!
-        sampleHTMLDocument = XMLDocument(htmlData: htmlData)
+        let testBundle = NSBundle(for: self.dynamicType)
+        let fileURL = testBundle.url(forResource: "index", withExtension: "html")!
+        let htmlData = NSData(contentsOf: fileURL)!
+        let htmlDataPointer = UnsafePointer<UInt8>(htmlData.bytes)
+        sampleHTMLDocument = XMLDocument(htmlData: Data(pointer: htmlDataPointer, length: htmlData.length))
         rootNode = sampleHTMLDocument.rootNode
     }
     
@@ -249,7 +252,7 @@ class XMLNodeHTMLTests: XCTestCase {
     // MARK: - Generator
     func testSequenceGenerator() {
         let head = rootNode.firstChild!
-        for (index, node) in head.enumerate() {
+        for (index, node) in head.enumerated() {
             if index == 0 {
                 XCTAssertEqual(node["http-equiv"]!, "content-type")
             } else if index == 1 {

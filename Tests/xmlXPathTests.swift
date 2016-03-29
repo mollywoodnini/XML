@@ -9,7 +9,9 @@
 
 import Foundation
 import XCTest
-@testable import XMLDocument
+@testable import CLibXML2
+@testable import XML
+@testable import Data
 
 class XMLNodeXMLXPathTests: XCTestCase {
     var sampleMenuXMLDocument: XMLDocument!
@@ -17,8 +19,10 @@ class XMLNodeXMLXPathTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        let xmlFileURL = NSURL(string: "sample-menu.xml", relativeToURL: NSBundle(forClass: self.dynamicType).resourceURL)!
-        sampleMenuXMLDocument = XMLDocument(xmlURL: xmlFileURL)
+        let xmlFileURL = NSURL(string: "sample-menu.xml", relativeTo: NSBundle(for: self.dynamicType).resourceURL)!
+        let xmlData = NSData(contentsOf: xmlFileURL)!
+        let xmlDataPointer = UnsafePointer<UInt8>(xmlData.bytes)
+        sampleMenuXMLDocument = XMLDocument(htmlData: Data(pointer: xmlDataPointer, length: xmlData.length))
         rootNode = sampleMenuXMLDocument.rootNode
     }
     
