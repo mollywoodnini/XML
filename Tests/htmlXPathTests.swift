@@ -9,17 +9,20 @@
 
 import Foundation
 import XCTest
-@testable import XMLDocument
+@testable import CLibXML2
+@testable import XML
+@testable import Data
 
 class htmlXPathTests: XCTestCase {
     var sampleHTML: XMLDocument!
     
     override func setUp() {
         super.setUp()
-        let testBundle = NSBundle(forClass: htmlXPathTests.self)
-        let testFileURL = testBundle.URLForResource("index", withExtension: "html", subdirectory: nil)
-        let data = NSData(contentsOfURL: testFileURL!)
-        sampleHTML = XMLDocument(htmlData: data!)
+        let testBundle = NSBundle(for: htmlXPathTests.self)
+        let testFileURL = testBundle.url(forResource: "index", withExtension: "html", subdirectory: nil)!
+        let data = NSData(contentsOf: testFileURL)!
+        let dataPointer = UnsafePointer<UInt8>(data.bytes)
+        sampleHTML = XMLDocument(htmlData: Data(pointer: dataPointer, length: data.length))
     }
     
     override func tearDown() {
