@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import CLibXML2
 @testable import XML
-@testable import Data
+@testable import C7
 
 class XMLTests: XCTestCase {
     override func setUp() {
@@ -29,7 +29,7 @@ class XMLTests: XCTestCase {
         let url = NSURL(string: "sample-menu.xml", relativeTo: NSBundle(for: self.dynamicType).resourceURL)!
         let urlData = NSData(contentsOf: url)!
         let urlDataPointer = UnsafePointer<UInt8>(urlData.bytes)
-        let document = XMLDocument(xmlData: Data(pointer: urlDataPointer, length: urlData.length))
+        let document = XMLDocument(xmlData: Data(start: urlDataPointer, count: urlData.length))
         XCTAssertNotNil(document)
     }
 
@@ -39,7 +39,7 @@ class XMLTests: XCTestCase {
         if let xmlFileURL = xmlFileURL {
             let xmlFileData = NSData(contentsOf: xmlFileURL)!
             let xmlFileDataPointer = UnsafePointer<UInt8>(xmlFileData.bytes)
-            let document = XMLDocument(xmlData: Data(pointer: xmlFileDataPointer, length: xmlFileData.length))
+            let document = XMLDocument(xmlData: Data(start: xmlFileDataPointer, count: xmlFileData.length))
             XCTAssertNotNil(document)
         } else {
             NSLog("WARNING: simple.xml is not found!")
@@ -64,7 +64,7 @@ class XMLTests: XCTestCase {
         let url = NSURL(string: "sample-menu.xml", relativeTo: NSBundle(for: self.dynamicType).resourceURL)!
         let urlData = NSData(contentsOf: url)!
         let urlDataPointer = UnsafePointer<UInt8>(urlData.bytes)
-        let document = XMLDocument(xmlData: Data(pointer: urlDataPointer, length: urlData.length))
+        let document = XMLDocument(xmlData: Data(start: urlDataPointer, count: urlData.length))
         XCTAssertNotNil(document!.rootNode)
     }
     
@@ -73,7 +73,7 @@ class XMLTests: XCTestCase {
         let url = NSURL(string: "sample-menu.xml", relativeTo: NSBundle(for: self.dynamicType).resourceURL)!
         let urlData = NSData(contentsOf: url)!
         let urlDataPointer = UnsafePointer<UInt8>(urlData.bytes)
-        let document = XMLDocument(xmlData: Data(pointer: urlDataPointer, length: urlData.length))
+        let document = XMLDocument(xmlData: Data(start: urlDataPointer, count: urlData.length))
         XCTAssertNotNil(document)
         XCTAssertEqual("\(document!)", document!.rootNode!.rawContent!)
     }

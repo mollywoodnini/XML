@@ -24,8 +24,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import Data
-import String
+import C7
 
 import CLibXML2
 
@@ -35,12 +34,13 @@ public class XMLDocument {
     /// The XML/HTML data.
     private(set) public var data: Data?
     
-    public typealias htmlDocPtr = xmlDocPtr
+    public typealias htmlDocPtr = xmlDocPtr?
     /// The xmlDocPtr for this document
-    private(set) public var xmlDoc: xmlDocPtr = nil
+    private(set) public var xmlDoc: xmlDocPtr?
+
     /// Alias for xmlDoc
     private(set) public var htmlDoc: htmlDocPtr {
-        get { return xmlDoc }
+        get { return xmlDoc  }
         set { xmlDoc = newValue }
     }
     
@@ -158,7 +158,7 @@ public class XMLDocument {
     
     - returns: An array of XMLNode or nil if rootNode is nil. An empty array will be returned if XPath matches no nodes.
     */
-    public func xPath(xPath: String) -> [XMLNode]? {
+    public func xPath(_ xPath: String) -> [XMLNode]? {
         return self.rootNode?.xPath(xPath)
     }
 }

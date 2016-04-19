@@ -1,5 +1,5 @@
 module CLibXML2 [system] {
-    header "./libxml2_imports.h"
+    header "libxml2_imports.h"
     link "xml2"
     export *
 }

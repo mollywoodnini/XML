@@ -232,16 +232,16 @@ public class XMLNode {
     */
     public subscript(key: String) -> String? {
         get {
-            var attribute: xmlAttrPtr = self.xmlNode.pointee.properties
+            var attribute: xmlAttrPtr? = self.xmlNode.pointee.properties
             while attribute != nil {
-                if key == String.fromXmlChar(attribute.pointee.name) {
-                    let contentChars = xmlNodeGetContent(attribute.pointee.children)
+                if key == String.fromXmlChar(attribute!.pointee.name) {
+                    let contentChars = xmlNodeGetContent(attribute!.pointee.children)
                     if contentChars == nil { return nil }
                     let contentString = String.fromXmlChar(contentChars)
                     free(contentChars)
                     return contentString
                 }
-                attribute = attribute.pointee.next
+                attribute = attribute!.pointee.next
             }
             return nil
         }
@@ -250,11 +250,11 @@ public class XMLNode {
     /// The attributes dictionary of this node.
     public lazy var attributes: [String: String] = {
         var result = [String: String]()
-        var attribute: xmlAttrPtr = self.xmlNode.pointee.properties;
+        var attribute: xmlAttrPtr? = self.xmlNode.pointee.properties;
         while attribute != nil {
-            let key = String.fromXmlChar(attribute.pointee.name)
+            let key = String.fromXmlChar(attribute!.pointee.name)
             assert(key != nil, "key doesn't exist")
-            let valueChars = xmlNodeGetContent(attribute.pointee.children)
+            let valueChars = xmlNodeGetContent(attribute!.pointee.children)
             var value: String? = ""
             if valueChars != nil {
                 value = String.fromXmlChar(valueChars)
@@ -264,7 +264,7 @@ public class XMLNode {
             
             result[key!] = value!
 
-            attribute = attribute.pointee.next
+            attribute = attribute!.pointee.next
         }
         return result
     }()
@@ -280,7 +280,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode, an empty array will be returned if XPath matches no nodes.
     */
-    public func xPath(xPath: String) -> [XMLNode] {
+    public func xPath(_ xPath: String) -> [XMLNode] {
         let xPathContext = xmlXPathNewContext(self.document.xmlDoc)
         if xPathContext == nil {
             // Unable to create XPath context.
@@ -308,7 +308,7 @@ public class XMLNode {
         
         var resultNodes = [XMLNode]()
         for i in 0 ..< Int(nodeSet.pointee.nodeNr) {
-            let xmlNode = XMLNode(xmlNode: nodeSet.pointee.nodeTab[i], xmlDocument: self.document, keepTextNode: keepTextNode)
+            let xmlNode = XMLNode(xmlNode: nodeSet.pointee.nodeTab[i]!, xmlDocument: self.document, keepTextNode: keepTextNode)
             resultNodes.append(xmlNode)
         }
         
@@ -328,7 +328,7 @@ public class XMLNode {
     
     - returns: The XMLNode object found or nil if it doesn't exist.
     */
-    public func firstChildWithName(name: String) -> XMLNode? {
+    public func firstChildWithName(_ name: String) -> XMLNode? {
         var node = firstChild
         while (node != nil) {
             if node!.name == name {
@@ -346,7 +346,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode.
     */
-    public func childrenWithName(name: String) -> [XMLNode] {
+    public func childrenWithName(_ name: String) -> [XMLNode] {
         return children.filter { $0.name == name }
     }
     
@@ -358,7 +358,7 @@ public class XMLNode {
     
     - returns: The XMLNode object found or nil if it doesn't exist.
     */
-    public func firstChildWithAttributeName(attributeName: String, attributeValue: String) -> XMLNode? {
+    public func firstChildWithAttributeName(_ attributeName: String, attributeValue: String) -> XMLNode? {
         var node = firstChild
         while (node != nil) {
             if let value = node![attributeName] where value == attributeValue {
@@ -377,7 +377,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode.
     */
-    public func childrenWithAttributeName(attributeName: String, attributeValue: String) -> [XMLNode] {
+    public func childrenWithAttributeName(_ attributeName: String, attributeValue: String) -> [XMLNode] {
         return children.filter { $0.attributes[attributeName] == attributeValue }
     }
     
@@ -392,7 +392,7 @@ public class XMLNode {
     
     - returns: The XMLNode object found or nil if it doesn't exist.
     */
-    public func firstDescendantWithName(name: String) -> XMLNode? {
+    public func firstDescendantWithName(_ name: String) -> XMLNode? {
         return firstDescendantWithName(name, node: self)
     }
     
@@ -405,7 +405,7 @@ public class XMLNode {
     
     - returns: The XMLNode object found or nil if it doesn't exist.
     */
-    private func firstDescendantWithName(name: String, node: XMLNode) -> XMLNode? {
+    private func firstDescendantWithName(_ name: String, node: XMLNode) -> XMLNode? {
         if !node.hasChildren {
             return nil
         }
@@ -428,7 +428,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode.
     */
-    public func descendantsWithName(name: String) -> [XMLNode] {
+    public func descendantsWithName(_ name: String) -> [XMLNode] {
         return descendantsWithName(name, node: self)
     }
     
@@ -440,7 +440,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode.
     */
-    private func descendantsWithName(name: String, node: XMLNode) -> [XMLNode] {
+    private func descendantsWithName(_ name: String, node: XMLNode) -> [XMLNode] {
         if !node.hasChildren {
             return []
         }
@@ -463,7 +463,7 @@ public class XMLNode {
     
     - returns: The XMLNode object found or nil if it doesn't exist.
     */
-    public func firstDescendantWithAttributeName(attributeName: String, attributeValue: String) -> XMLNode? {
+    public func firstDescendantWithAttributeName(_ attributeName: String, attributeValue: String) -> XMLNode? {
         return firstDescendantWithAttributeName(attributeName, attributeValue: attributeValue, node: self)
     }
     
@@ -476,7 +476,7 @@ public class XMLNode {
     
     - returns: The XMLNode object found or nil if it doesn't exist.
     */
-    private func firstDescendantWithAttributeName(attributeName: String, attributeValue: String, node: XMLNode) -> XMLNode? {
+    private func firstDescendantWithAttributeName(_ attributeName: String, attributeValue: String, node: XMLNode) -> XMLNode? {
         if !node.hasChildren {
             return nil
         }
@@ -500,7 +500,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode.
     */
-    public func descendantsWithAttributeName(attributeName: String, attributeValue: String) -> [XMLNode] {
+    public func descendantsWithAttributeName(_ attributeName: String, attributeValue: String) -> [XMLNode] {
         return descendantsWithAttributeName(attributeName, attributeValue: attributeValue, node: self)
     }
     
@@ -513,7 +513,7 @@ public class XMLNode {
     
     - returns: An array of XMLNode.
     */
-    private func descendantsWithAttributeName(attributeName: String, attributeValue: String, node: XMLNode) -> [XMLNode] {
+    private func descendantsWithAttributeName(_ attributeName: String, attributeValue: String, node: XMLNode) -> [XMLNode] {
         if !node.hasChildren {
             return []
         }
@@ -532,7 +532,7 @@ public class XMLNode {
 // MARK: - Equatable
 extension XMLNode: Equatable { }
 public func ==(lhs: XMLNode, rhs: XMLNode) -> Bool {
-    if lhs.document == rhs.document && lhs.xmlNode != nil && rhs.xmlNode != nil {
+    if lhs.document == rhs.document {
         return xmlXPathCmpNodes(lhs.xmlNode, rhs.xmlNode) == 0
     }
     return false

@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import CLibXML2
 @testable import XML
-@testable import Data
+@testable import C7
 
 class XMLNodeXMLXPathTests: XCTestCase {
     var sampleMenuXMLDocument: XMLDocument!
@@ -22,7 +22,7 @@ class XMLNodeXMLXPathTests: XCTestCase {
         let xmlFileURL = NSURL(string: "sample-menu.xml", relativeTo: NSBundle(for: self.dynamicType).resourceURL)!
         let xmlData = NSData(contentsOf: xmlFileURL)!
         let xmlDataPointer = UnsafePointer<UInt8>(xmlData.bytes)
-        sampleMenuXMLDocument = XMLDocument(htmlData: Data(pointer: xmlDataPointer, length: xmlData.length))
+        sampleMenuXMLDocument = XMLDocument(htmlData: Data(start: xmlDataPointer, count: xmlData.length))
         rootNode = sampleMenuXMLDocument.rootNode
     }
     
