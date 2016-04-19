@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import CLibXML2
 @testable import XML
-@testable import Data
+@testable import C7
 
 class XMLNodeHTMLTests: XCTestCase {
     var sampleHTMLDocument: XMLDocument!
@@ -20,10 +20,10 @@ class XMLNodeHTMLTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let testBundle = NSBundle(for: self.dynamicType)
-        let fileURL = testBundle.url(forResource: "index", withExtension: "html")!
+        let fileURL = testBundle.urlForResource("index", withExtension: "html")!
         let htmlData = NSData(contentsOf: fileURL)!
         let htmlDataPointer = UnsafePointer<UInt8>(htmlData.bytes)
-        sampleHTMLDocument = XMLDocument(htmlData: Data(pointer: htmlDataPointer, length: htmlData.length))
+        sampleHTMLDocument = XMLDocument(htmlData: Data(start: htmlDataPointer, count: htmlData.length))
         rootNode = sampleHTMLDocument.rootNode
     }
     
