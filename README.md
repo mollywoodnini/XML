@@ -63,6 +63,16 @@ let package = Package(
 )
 ```
 
+OSX
+```bash
+$ swift build -Xcc -I/usr/local/include -Xcc -I/usr/local/include/libxml2 -Xlinker -L/usr/local/lib/
+```
+
+Linux
+```
+$ swift build -Xcc -I/usr/include/libxml2
+```
+
 ## Community
 
 [![Slack][slack-image]][slack-url]
