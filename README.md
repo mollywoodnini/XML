@@ -48,10 +48,19 @@ if let googleIndexData = googleIndexData {
 
 ## Installation
 
+- OSX
+
 ```bash
 brew install libxml2
 brew link --force libxml2
 ```
+
+- Linux
+```bash
+sudo apt-get install libxml2-dev 
+```
+
+- Package.swift
 
 ```swift
 import PackageDescription
@@ -63,12 +72,12 @@ let package = Package(
 )
 ```
 
-OSX
+- OSX
 ```bash
 $ swift build -Xcc -I/usr/local/include -Xcc -I/usr/local/include/libxml2 -Xlinker -L/usr/local/lib/
 ```
 
-Linux
+- Linux
 ```
 $ swift build -Xcc -I/usr/include/libxml2
 ```
