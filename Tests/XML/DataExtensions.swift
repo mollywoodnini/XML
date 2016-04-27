@@ -1,10 +1,3 @@
-//
-//  JiNodeXMLXPathTests.swift
-//  XML
-//
-//  Copyright (c) 2016 Zewo. All rights reserved.
-//
-
 @testable import C7
 
 //FIXME: remove when C7 pr merged
