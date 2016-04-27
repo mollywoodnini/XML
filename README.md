@@ -13,7 +13,7 @@ XML is a Swift libxml2 wrapper for parsing XML/HTML.
 ## Features
 - [x] Build XML/HTML Tree and Navigate
 - [x] XPath Query Supported
-- [x] Comprehensive Unit Test Coverage
+- [ ] Comprehensive Unit Test Coverage
 - [ ] CSS Selector (on going)
 
 ## Usage
