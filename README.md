@@ -71,7 +71,7 @@ import PackageDescription
 
 let package = Package(
     dependencies: [
-        .Package(url: "https://github.com/Zewo/XML.git", majorVersion: 0, minor: 5),
+        .Package(url: "https://github.com/Zewo/XML.git", majorVersion: 0, minor: 6),
     ]
 )
 ```
@@ -79,7 +79,7 @@ let package = Package(
 - OSX
 
 ```bash
-swift build -Xcc -I/usr/include/libxml2
+swift build
 ```
 
 - Linux
