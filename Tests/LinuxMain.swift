@@ -1,10 +1,10 @@
 #if os(Linux)
-
-import XCTest
-@testable import XMLTestSuite
-
+    
+    import XCTest
+    @testable import XMLTests
+    
 XCTMain([
-    testCase(XMLTests.allTests)
-])
-
+    testCase(XMLDocumentTests.allTests),
+    ])
+    
 #endif
