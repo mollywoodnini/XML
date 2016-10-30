@@ -54,31 +54,44 @@ public class XMLDocument {
 
     - returns: The initialized XML document object or nil if the object could not be initialized.
     */
-    public required init?(data: Data?, isXML: Bool) {
+    public required init?(data: Data?, isXML: Bool, encoding: String.Encoding = String.Encoding.utf8) {
         guard let data = data, data.count > 0 else { return nil }
-
+        
         self.isXML = isXML
         self.data = data
-
-        var utf8Encoding: Int8 = 1// = UnsafeMutablePointer<Int8>()
-
+        
+        let cfEncoding = CFStringConvertNSStringEncodingToEncoding(encoding.rawValue)
+        let cfEncodingAsString: CFString = CFStringConvertEncodingToIANACharSetName(cfEncoding)
+        let cEncoding: UnsafePointer<CChar>? = CFStringGetCStringPtr(cfEncodingAsString, 0)
+        
         let options: CInt
         if isXML {
             options = CInt(XML_PARSE_RECOVER.rawValue)
         } else {
             options = CInt(HTML_PARSE_RECOVER.rawValue | HTML_PARSE_NOWARNING.rawValue | HTML_PARSE_NOERROR.rawValue)
         }
-
+        
         let bufSize = Int32(data.count)
         xmlDoc = data.withUnsafeBytes { (buf: UnsafePointer<Int8>) in
-            xmlReadMemory(buf, bufSize, nil, &utf8Encoding, options)
+            xmlReadMemory(buf, bufSize, nil, cEncoding, options)
         }
-
+        
         if xmlDoc == nil { return nil }
     }
 
 
     // MARK: - Data Init
+    
+    /**
+     Initializes a XML document object with a HTML string and it's encoding.
+     
+     - parameter htmlString: HTML string. encoding: encoding
+     
+     - returns: The initialized XML document object or nil if the object could not be initialized.
+     */
+    public convenience init?(htmlString: String, encoding: String.Encoding) {
+        self.init(data: htmlString.data(using: encoding), isXML: false, encoding: encoding)
+    }
 
     /**
     Initializes a XML document object with the supplied XML data and encoding.
